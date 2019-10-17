@@ -36,7 +36,7 @@ void main()
                 T[line_number][i] = atof(token);
 
 
-                if(i != t - 1) // delimited value
+                if(i != t - 1) // update token from delimited value
                 {
                     printf("%s\t",token);
                     token = strtok(NULL, delim);
@@ -64,12 +64,25 @@ void main()
             {
                 printf("%s\t",token);
 
-                if(i != N - 1) // delimited value
+                printf("\n");
+
+                for (int k = 0; k < j; k++)
+                {
+
+//                    token -> unsigned char
+                    H[i][k] = (unsigned char) atoi(token) ^ (unsigned char) k;
+                    // ^ is next step to use S-box? with the value above?
+                    // what is HW() ?
+                    printf("%x\t", k);
+                }
+
+
+
+
+                if(i != N - 1) // update token from delimited value
                 {
 
                     token = strtok(NULL, delim);
-                } else {
-                    printf("%s\n\n",token);
                 }
 
 
