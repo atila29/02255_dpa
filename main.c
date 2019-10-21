@@ -122,11 +122,11 @@ void main()
     double correlations[J][t];
 
     // Step 3
-    for (int j = 0; j < J; ++j) {
+    for (int j = 0; j < 1; ++j) {
         for (int l = 0; l < t; ++l) {
-            correlations[j][l] = corr(j, l);
-
             printf("round: %d %d\n", j, l);
+
+            correlations[j][l] = corr(j, l);
         }
     }
 }
@@ -168,12 +168,12 @@ double corr(int j, int l)
 
     for(int i = 0; i < N; i++)
     {
-        x += (H[i][j] - mean(hj)) * (tl[i] - mean(tl));
+        x += ((hj[i] - mean(hj)) * (tl[i] - mean(tl)));
     }
 
     for(int i = 0; i < N; i++)
     {
-        y += (H[i][j] - mean(hj));
+        y += (hj[i]  - mean(hj));
     }
 
     for(int i = 0; i < N; i++)
@@ -181,7 +181,5 @@ double corr(int j, int l)
         z += (tl[i] - mean(tl));
     }
 
-    double sq = sqrt(pow(y, 2) * pow(z, 2));
-
-    return x/sq;
+    return x / sqrt((y*y) * (z *z));
 }
