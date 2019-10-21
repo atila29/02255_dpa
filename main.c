@@ -26,6 +26,8 @@ unsigned char S[] = {
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16 };
 
 
+int HW(unsigned char i);
+
 void main()
 {
     FILE *fp = fopen("T4.dat", "r");
@@ -87,11 +89,7 @@ void main()
 
                 for (int k = 0; k < j; k++)
                 {
-
-//                    token -> unsigned char
-                    H[i][k] = S[(unsigned char) atoi(token) ^ (unsigned char) k];
-                    // ^ is next step to use S-box? with the value above?
-                    // what is HW() ?
+                    H[i][k] = HW(S[(unsigned char) atoi(token) ^ (unsigned char) k]);
                     printf("%x\t", k);
                 }
 
@@ -103,18 +101,6 @@ void main()
 
                     token = strtok(NULL, delim);
                 }
-
-
-//                T[line_number][i] = atof(token);
-//
-//
-//                if(i == t - 1) // last buffer
-//                {
-//                    printf("%s\t",token);
-//                    token = strtok(NULL, delim);
-//                } else {
-//                    printf("%s\n\n",token);
-//                }
             }
         }
         fclose(fp_input);
@@ -124,4 +110,15 @@ void main()
 
 
 
+}
+
+// source: https://tech.liuchao.me/2016/11/count-bits-of-integer/
+int HW(unsigned char input) {
+    int count = 0;
+    int n = (int) input;
+    while (n != 0) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
 }
