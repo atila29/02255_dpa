@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 #define N 600
 #define t 55
-#define j 256
+#define J 256
 
 unsigned char S[] = {
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -25,8 +26,18 @@ unsigned char S[] = {
         0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16 };
 
+float T[N][t];
+
+unsigned char H[N][J];
+
 
 int HW(unsigned char i);
+
+double mean(int vector[]);
+
+//double corr(unsigned char h_j[N][J], unsigned char t_k[N], int j);
+double corr(int j, int l);
+
 
 void main()
 {
@@ -37,9 +48,7 @@ void main()
     const char delim[2] = ",";
     char *token;
 
-    float T[N][t];
 
-    unsigned char H[N][j];
 
 
     // Step 1
@@ -87,7 +96,7 @@ void main()
 
                 printf("\n");
 
-                for (int k = 0; k < j; k++)
+                for (int k = 0; k < J; k++)
                 {
                     H[i][k] = HW(S[(unsigned char) atoi(token) ^ (unsigned char) k]);
                     printf("%x\t", k);
@@ -108,9 +117,13 @@ void main()
         perror("inputs4.dat");
     }
 
+    // Step 3
+
 
 
 }
+
+
 
 // source: https://tech.liuchao.me/2016/11/count-bits-of-integer/
 int HW(unsigned char input) {
@@ -121,4 +134,46 @@ int HW(unsigned char input) {
         n >>= 1;
     }
     return count;
+}
+
+double mean(int *vector) {
+    int sum = 0;
+    for (int i = 0; i < N; i++)
+    {
+        sum += vector[i];
+    }
+    return sum / N;
+}
+
+double corr(int j, int l)
+{
+    unsigned char hj[N];
+    double tl[t];
+
+    double x=0, y=0, z=0;
+
+    for(int i = 0; i < N; i++)
+    {
+        hj[i] = H[i][j];
+        tl[i] = T[i][l];
+    }
+
+    for(int i = 0; i < N; i++)
+    {
+        x += (H[i][j] - mean(hj)) * (tl[i] - mean(tl));
+    }
+
+    for(int i = 0; i < N; i++)
+    {
+        y += (H[i][j] - mean(hj)) ;
+    }
+
+    for(int i = 0; i < N; i++)
+    {
+        z += (tl[i] - mean(tl));
+    }
+
+    double sq = sqrt(pow(y, 2) * pow(z, 2));
+
+    return x/sq;
 }
