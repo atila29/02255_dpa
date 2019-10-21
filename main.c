@@ -33,7 +33,7 @@ unsigned char H[N][J];
 
 int HW(unsigned char i);
 
-double mean(int vector[]);
+double mean(double vector[]);
 
 //double corr(unsigned char h_j[N][J], unsigned char t_k[N], int j);
 double corr(int j, int l);
@@ -41,6 +41,8 @@ double corr(int j, int l);
 
 void main()
 {
+
+
     FILE *fp = fopen("T4.dat", "r");
 
     FILE *fp_input = fopen("input4.dat", "r");
@@ -117,10 +119,16 @@ void main()
         perror("inputs4.dat");
     }
 
+    double correlations[J][t];
+
     // Step 3
+    for (int j = 0; j < J; ++j) {
+        for (int l = 0; l < t; ++l) {
+            correlations[j][l] = corr(j, l);
 
-
-
+            printf("round: %d %d\n", j, l);
+        }
+    }
 }
 
 
@@ -136,19 +144,19 @@ int HW(unsigned char input) {
     return count;
 }
 
-double mean(int *vector) {
-    int sum = 0;
+double mean(double vector[]) {
+    double sum = 0;
     for (int i = 0; i < N; i++)
     {
         sum += vector[i];
     }
-    return sum / N;
+    return (sum / N);
 }
 
 double corr(int j, int l)
 {
-    unsigned char hj[N];
-    double tl[t];
+    double hj[N];
+    double tl[N];
 
     double x=0, y=0, z=0;
 
@@ -165,7 +173,7 @@ double corr(int j, int l)
 
     for(int i = 0; i < N; i++)
     {
-        y += (H[i][j] - mean(hj)) ;
+        y += (H[i][j] - mean(hj));
     }
 
     for(int i = 0; i < N; i++)
