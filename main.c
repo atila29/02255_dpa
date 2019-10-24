@@ -45,7 +45,7 @@ void main()
 
     FILE *fp = fopen("T4.dat", "r");
 
-    FILE *fp_input = fopen("input4.dat", "r");
+    FILE *fp_input = fopen("inputs4.dat", "r");
 
     const char delim[2] = ",";
     char *token;
@@ -122,14 +122,21 @@ void main()
     double correlations[J][t];
 
     // Step 3
+    FILE *corrFile = fopen("corr.csv", "w");
     for (int j = 0; j < J; ++j) {
         for (int l = 0; l < t; ++l) {
-            printf("round: %d %d\n", j, l);
+            //printf("round: %d %d\n", j, l);
 
             correlations[j][l] = corr(j, l);
-
+            fprintf(corrFile, "%f,", corr(j, l));
         }
+        fprintf(corrFile, "\n");
     }
+    fclose(corrFile);
+
+
+
+    printf("Done");
 }
 
 
